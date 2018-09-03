@@ -7,8 +7,9 @@ call plug#begin('~/.vim/plugged')
 " Declare the list of plugins here:
 
 Plug 'cjrh/vim-conda'
-
-
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
+Plug 'junegunn/fzf.vim'
+Plug 'python-mode/python-mode', {'branch' : 'develop'}
 call plug#end()
 
 
@@ -38,11 +39,9 @@ Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
 Plugin 'majutsushi/tagbar'
 Plugin 'godlygeek/tabular'
 Plugin 'plasticboy/vim-markdown'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'davidhalter/jedi-vim'
-
-
-
-
 " ...
 
 " All of your Plugins must be added before the following line
@@ -52,20 +51,27 @@ filetype plugin indent on    " required
 set splitbelow
 set splitright
 
+" Avoid conflicts with jedi-vim and python-mode
+let g:pymode_rope = 0
+
+" Enabling python3 syntax checking python-mod:
+let g:pymode_python = 'python3'
+
 
 " Enable Powerline
 set rtp+=~/.local/lib/python3.6/site-packages/powerline/bindings/vim/
 set laststatus=2
 set t_Co=256
 
-
+" for use later. If i don't want the docstring window to popup.
+" autocmd FileType pyton setlocal completeopt-=preview
 
 
 "split navigations
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
+"nnoremap <C-J> <C-W><C-J>
+"nnoremap <C-K> <C-W><C-K>
+"nnoremap <C-L> <C-W><C-L>
+"nnoremap <C-H> <C-W><C-H>
 
 " Enable folding
 set foldmethod=indent
@@ -121,7 +127,7 @@ call togglebg#map("<F5>")
 let NERDTreeIgnore=['\.pyc$', '\~$']
 
 "For supersearch Ctrlp:
-set runtimepath^=~/.vim/bundle/ctrlp.vim
+"set runtimepath^=~/.vim/bundle/ctrlp.vim
 
 
 " Line Numbering
@@ -137,3 +143,45 @@ nmap <F8> :TagbarToggle<CR>
 
 
 set ma
+
+
+" Vim sets working directoroy to the current file's directory:
+autocmd BufEnter * lcd %:p:h
+" map <F9> to NERDTreeToggle
+nmap <F9> :NERDTreeToggle<CR>
+
+
+" ==================
+" === C/C++/Cuda ===
+" ==================
+" Security purposes
+set exrc
+set secure
+
+
+" Filetype detection
+augroup project
+	autocmd!
+	autocmd BufRead, BufNewFile *.h, *.c set filetype=c.doxygen
+" Setting path variable
+let &path.="/usr/include/"
+
+
+"Autocomplete
+" REVISAR SI DEJAR YCM y quitar jedi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
