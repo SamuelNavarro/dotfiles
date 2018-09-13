@@ -8,6 +8,9 @@
 Revisar:
 https://github.com/Valloric/YouCompleteMe#full-installation-guide
 
+### Para Instalación
+```sudo apt-get install vim-gnome -y``` - para habilitar el clipboard del sistema. Verificar que ```vim --version``` tenga +clipboard.
+
 
 # VIM
 
