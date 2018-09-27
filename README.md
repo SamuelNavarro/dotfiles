@@ -24,3 +24,8 @@ De los buscadores, ```Ctrl + P``` es igual que :FZF, busca archivos. Con FZF pue
 
 ### Javascript
 https://blog.ngzhian.com/vim-javascript-development.html es de donde saqué la mayoría de las cosas.
+
+
+### Actualizar Ctags.
+ctags -R -o ~/ctags ~/file/to/path
+Con esto ya servirá bien ctags para ese proyecto en particular. Habrá que ver cómo agregar las otras tags y hacer que se actualicen automáticamente. 
