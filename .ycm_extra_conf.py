@@ -19,7 +19,7 @@ BASE_FLAGS = [
         '-xc++',
         '-I/usr/lib/',
         '-I/usr/include/',
-        '-I/usr/local/libtorch/lib/',
+        '-I/usr/local/libtorch/',
         '-I/usr/local/libtorch/include/',
         '-isystem',
         '-xcu',
