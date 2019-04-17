@@ -33,8 +33,8 @@ Plugin 'gmarik/Vundle.vim'
 " used Bundle instead of Plugin)
 Plugin 'tmhedberg/SimpylFold' " Properly folds class and functions defs, leaving loops untouched.
 Plugin 'vim-scripts/indentpython.vim'
-Plugin 'vim-syntastic/syntastic' " Check sintax on each save
-Plugin 'nvie/vim-flake8'       " Runs the currently open file through Flake8
+"Plugin 'vim-syntastic/syntastic' " Check sintax on each save
+"Plugin 'nvie/vim-flake8'       " Runs the currently open file through Flake8
 Plugin 'scrooloose/nerdtree'
 Plugin 'tpope/vim-fugitive' " Git wrapper
 Plugin 'majutsushi/tagbar' " TagBar in the right of the window
@@ -109,13 +109,34 @@ autocmd FileType python set sts=4
 " =================
 " ===== YCM =======
 " =================
+
+
+let g:python3_host_prog = '/home/samuel/anaconda3/bin/python'
+
+
 let g:ycm_collect_identifiers_from_tags_files = 1 " Let YCM read tags from Ctags file
 let g:ycm_use_ultisnips_completer = 1 " Default 1, just ensure
 let g:ycm_seed_identifiers_with_syntax = 1 " Completion for programming language's keyword
 let g:ycm_complete_in_comments = 1 " Completion in comments
 let g:ycm_complete_in_strings = 1 " Completion in string
 let g:ycm_autoclose_preview_window_after_completion=1 " Autoclosing the preview window
+
+
+
+
+" python with virtualenv support and YCM
+" See https://github.com/Valloric/YouCompleteMe#python-semantic-completion
+let g:ycm_python_interpreter_path = ''
+let g:ycm_python_sys_path = []
+let g:ycm_extra_conf_vim_data = [
+  \  'g:ycm_python_interpreter_path',
+  \  'g:ycm_python_sys_path'
+  \]
 let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
+
+
+
+
 
 
 " ==================
@@ -195,6 +216,15 @@ colorscheme gruvbox
 let g:gruvbox_contrast_dark="hard"
 
 
+""""""""""""""""""""""
+"  Correct spelling  "
+""""""""""""""""""""""
+setlocal spell
+set spelllang=es,en
+inoremap <C-f> <c-g>u<Esc>[s1z=`]a<c-g>u
+
+
+
 " Line Numbering
 set number
 set relativenumber
@@ -226,7 +256,7 @@ let NERDTreeIgnore=['\.pyc$', '\~$']
 
 
 " TagBar
-nmap <F8> :TagbarToggle<CR>
+nmap <F5> :TagbarToggle<CR>
 
 " ================
 " == lightline ===
@@ -264,15 +294,31 @@ let g:vimwiki_list = [{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md'}
 let g:tex_flavor='latex'
 let g:vimtex_view_method='zathura'
 let g:vimtex_quickfix_mode=0
-set conceallevel=1  " Hide code when your curosr is not in the line.
+set conceallevel=1  " Hide code when your curosr is not in the line. 
 let g:tex_conceal='abdmg' " Hide code when your cursor is not in the line.
+
+" Be able to put code with minted
+" https://github.com/lervag/vimtex/issues/467
+"
+let g:vimtex_compiler_latexmk = {
+	\ 'options' : [
+	\	'-pdf',
+	\	'--shell-escape',
+	\	'-verbose',
+	\	'-file-line-error',
+	\	'-synctex=1',
+	\	'-interaction=nonstopmode',
+	\ ],
+	\}
+
+
 
 " =============================
 " ========= UltiSnips =========
 " =============================
 " UltiSnips
 
-let g:UltiSnipsSnippetsDir = '~/.vim/bundle/ultisnips/'
+let g:UltiSnipsSnippetsDir = '~/.vim/bundle/vim-snippets/'
 let g:UltiSnipsSnippetDirectories=["CustomSnips", "UltiSnips"]
 let g:UltiSnipsExpandTrigger="<c-j>"
 let g:UltiSnipsJumpForwardTrigger="<c-j>"
