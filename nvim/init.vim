@@ -33,8 +33,8 @@ Plugin 'gmarik/Vundle.vim'
 " used Bundle instead of Plugin)
 Plugin 'tmhedberg/SimpylFold' " Properly folds class and functions defs, leaving loops untouched.
 Plugin 'vim-scripts/indentpython.vim'
-"Plugin 'vim-syntastic/syntastic' " Check sintax on each save
-"Plugin 'nvie/vim-flake8'       " Runs the currently open file through Flake8
+Plugin 'w0rp/ale'  " Syntax checker
+Plugin 'nvie/vim-flake8'       " Runs the currently open file through Flake8
 Plugin 'scrooloose/nerdtree'
 Plugin 'tpope/vim-fugitive' " Git wrapper
 Plugin 'majutsushi/tagbar' " TagBar in the right of the window
@@ -74,6 +74,16 @@ set noexpandtab
 " ===========================================
 
 
+" Ale linter only when saving files
+let g:ale_lint_on_text_changed = 'never'
+
+
+
+
+" =================
+" === Python ======
+" =================
+
 "Suppress the message of vim-conda environment information on vim startup
 let g:conda_startup_msg_suppress=1
 
@@ -95,12 +105,9 @@ au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
 
 " Make python code look pretty:
 let python_highlight_all=1
-syntax on
+" syntax on
 
 
-" =================
-" === Django ======
-" =================
 autocmd FileType python set sw=4
 autocmd FileType python set ts=4
 autocmd FileType python set sts=4
