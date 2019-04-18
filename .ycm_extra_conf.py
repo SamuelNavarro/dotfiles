@@ -15,16 +15,16 @@ BASE_FLAGS = [
         '-fexceptions',
         '-ferror-limit=10000',
         '-DNDEBUG',
-        '-std=c++17',
         '-xc++',
+        '-std=c++11',
         '-I/usr/lib/',
         '-I/usr/include/',
         '-I/usr/local/libtorch/',
         '-I/usr/local/libtorch/include/',
         '-isystem',
         '-xcu',
-        '-I/usr/local/cuda-9.2/lib64/',
-        '-I/usr/local/cuda-9.2/include/',
+        '-I/usr/local/cuda/lib64/',
+        '-I/usr/local/cuda/include/',
         ]
 
 SOURCE_EXTENSIONS = [
@@ -181,3 +181,11 @@ def FlagsForFile(filename):
             'flags': final_flags,
             'do_cache': True
             }
+
+
+def Settings( **kwargs ):
+  client_data = kwargs[ 'client_data' ]
+  return {
+    'interpreter_path': client_data[ 'g:ycm_python_interpreter_path' ],
+    'sys_path': client_data[ 'g:ycm_python_sys_path' ]
+  }
