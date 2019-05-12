@@ -6,7 +6,7 @@ call plug#begin('~/.vim/plugged')
 
 " Declare the list of plugins here:
 
-Plug 'cjrh/vim-conda' " Use of codna-envs, etc
+"Plug 'cjrh/vim-conda' " Use of codna-envs, etc
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' } " Fuzzy Search.
 Plug 'junegunn/fzf.vim'
 Plug 'pangloss/vim-javascript'  " Syntax highlighting and improved indentation.
@@ -33,7 +33,7 @@ Plugin 'gmarik/Vundle.vim'
 " used Bundle instead of Plugin)
 Plugin 'tmhedberg/SimpylFold' " Properly folds class and functions defs, leaving loops untouched.
 Plugin 'vim-scripts/indentpython.vim'
-Plugin 'w0rp/ale'  " Syntax checker
+"Plugin 'w0rp/ale'  " Syntax checker
 Plugin 'nvie/vim-flake8'       " Runs the currently open file through Flake8
 Plugin 'scrooloose/nerdtree'
 Plugin 'tpope/vim-fugitive' " Git wrapper
@@ -42,7 +42,7 @@ Plugin 'godlygeek/tabular' " Markdown with Vim
 Plugin 'plasticboy/vim-markdown' "Markdown with Vim
 Plugin 'Valloric/YouCompleteMe' " Autocompletion.
 Plugin 'christoomey/vim-tmux-navigator'  " Move in panes vim-tmux
-Plugin 'vimwiki/vimwiki'				 " Vimwiki
+Plugin 'vimwiki/vimwiki'     " Vimwiki
 Plugin 'octol/vim-cpp-enhanced-highlight' " Adds highlighting of (user defined) functions etc.
 Plugin 'sirver/ultisnips'     " Snippets with UltiSnips
 Plugin 'honza/vim-snippets' " Snippets are separated from the engine.
@@ -75,8 +75,9 @@ set noexpandtab
 
 
 " Ale linter only when saving files
-let g:ale_lint_on_text_changed = 'never'
-
+" let g:ale_lint_on_text_changed = 'never'
+" Disale completion. Only completion from ycm
+" let g:ale_completion_enabled=0
 
 
 
@@ -126,19 +127,13 @@ let g:ycm_use_ultisnips_completer = 1 " Default 1, just ensure
 let g:ycm_seed_identifiers_with_syntax = 1 " Completion for programming language's keyword
 let g:ycm_complete_in_comments = 1 " Completion in comments
 let g:ycm_complete_in_strings = 1 " Completion in string
-let g:ycm_autoclose_preview_window_after_completion=1 " Autoclosing the preview window
+"let g:ycm_autoclose_preview_window_after_completion=1 " Autoclosing the preview window
 
 
 
 
 " python with virtualenv support and YCM
 " See https://github.com/Valloric/YouCompleteMe#python-semantic-completion
-let g:ycm_python_interpreter_path = ''
-let g:ycm_python_sys_path = []
-let g:ycm_extra_conf_vim_data = [
-  \  'g:ycm_python_interpreter_path',
-  \  'g:ycm_python_sys_path'
-  \]
 let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
 
 
@@ -308,15 +303,15 @@ let g:tex_conceal='abdmg' " Hide code when your cursor is not in the line.
 " https://github.com/lervag/vimtex/issues/467
 "
 let g:vimtex_compiler_latexmk = {
-	\ 'options' : [
-	\	'-pdf',
-	\	'--shell-escape',
-	\	'-verbose',
-	\	'-file-line-error',
-	\	'-synctex=1',
-	\	'-interaction=nonstopmode',
-	\ ],
-	\}
+\ 'options' : [
+\ '-pdf',
+\ '--shell-escape',
+\ '-verbose',
+\ '-file-line-error',
+\ '-synctex=1',
+\ '-interaction=nonstopmode',
+\ ],
+\}
 
 
 
