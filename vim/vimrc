@@ -1,9 +1,11 @@
-set nocompatible              " required
-filetype off                  " required
+set nocompatible              " required by Vundle
+filetype off                  " required by Vundle
 
 " Remap <leader>
 let mapleader=","
 
+" Remap <localleader>
+let maplocalleader=",,"
 
 " set the runtime path to include vim-plug
 call plug#begin('~/.vim/plugged')
@@ -12,10 +14,11 @@ call plug#begin('~/.vim/plugged')
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' } " Fuzzy Search.
 Plug 'junegunn/fzf.vim'
 Plug 'lervag/vimtex' " To create .tex file.
-Plug 'itchyny/lightline.vim' " statusline/tabline for Vim
-Plug 'glepnir/oceanic-material'  " Colorscheme
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'maxmellon/vim-jsx-pretty'
+Plug 'yuezk/vim-js'
+Plug 'vim-python/python-syntax'
 call plug#end()
-
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim 
@@ -29,10 +32,8 @@ Plugin 'gmarik/Vundle.vim'
 
 " add all your plugins here (note older versions of Vundle
 " used Bundle instead of Plugin)
-Plugin 'ycm-core/YouCompleteMe'
 Plugin 'tmhedberg/SimpylFold' " Properly folds class and functions defs, leaving loops untouched.
 Plugin 'vim-scripts/indentpython.vim'
-Plugin 'dense-analysis/ale' " Linter
 Plugin 'nvie/vim-flake8'       " Runs the currently open file through Flake8
 Plugin 'scrooloose/nerdtree'
 Plugin 'tpope/vim-fugitive' " Git wrapper
@@ -40,18 +41,15 @@ Plugin 'majutsushi/tagbar' " TagBar in the right of the window
 Plugin 'godlygeek/tabular' " Markdown with Vim
 Plugin 'plasticboy/vim-markdown' "Markdown with Vim
 Plugin 'christoomey/vim-tmux-navigator'  " Move in panes vim-tmux
-Plugin 'vimwiki/vimwiki'     " Vimwiki
 Plugin 'octol/vim-cpp-enhanced-highlight' " Adds highlighting of (user defined) functions etc.
 Plugin 'sirver/ultisnips'     " Snippets with UltiSnips
 Plugin 'honza/vim-snippets' " Snippets are separated from the engine.
 Plugin 'ryanoasis/vim-devicons'
-Plugin 'junegunn/goyo.vim' " Writing in markdown full page
-Plugin 'junegunn/limelight.vim' " Nice compatibility with goyo.
-Plugin 'morhetz/gruvbox' " colorScheme
-Plugin 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
+" Plugin 'morhetz/gruvbox' " colorScheme
+Plugin 'NLKNguyen/papercolor-theme'
+Plugin 'iamcco/markdown-preview.nvim'
 Plugin 'preservim/nerdcommenter'
-" ...
-
+Plugin 'itchyny/lightline.vim'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -63,11 +61,9 @@ filetype plugin indent on    " required
 " ============= GENERALES ===================
 " ===========================================
 " ===========================================
-
 set splitbelow
 set splitright
 set tabstop=8 softtabstop=0 expandtab shiftwidth=2 smarttab
-
 
 " Open Vim in same line number
 " Acording to https://stackoverflow.com/questions/774560/in-vim-how-do-i-get-a-file-to-open-at-the-same-line-number-i-closed-it-at-last
@@ -79,7 +75,85 @@ if has("autocmd")
       \ | endif
 endif
 
+" ====================
+" ====================
+" Coc completion
+" ====================
+" ====================
 
+
+" TextEdit might fail if hidden is not set.
+set hidden
+
+" Some servers have issues with backup files, see #649.
+set nobackup
+set nowritebackup
+
+" Give more space for displaying messages.
+set cmdheight=2
+
+" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
+" delays and poor user experience.
+set updatetime=300
+
+" Don't pass messages to |ins-completion-menu|.
+set shortmess+=c
+
+" Always show the signcolumn, otherwise it would shift the text each time
+" diagnostics appear/become resolved.
+if has("nvim-0.5.0") || has("patch-8.1.1564")
+  " Recently vim can merge signcolumn and number column into one
+  set signcolumn=number
+else
+  set signcolumn=yes
+endif
+
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+
+" Make <CR> auto-select the first completion item and notify coc.nvim to
+" format on enter, <cr> could be remapped by other vim plugin
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+" Use `[g` and `]g` to navigate diagnostics
+" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . " " . expand('<cword>')
+  endif
+endfunction
+
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " ===========================================
 " ===========================================
@@ -87,7 +161,6 @@ endif
 " =========== Python, C, C++, CUDA ==========
 " ===========================================
 " ===========================================
-
 " Un pedo de tabs con makefiles según:
 " https://stackoverflow.com/questions/234564/tab-key-4-spaces-and-auto-indent-after-curly-braces-in-vim/21323445#21323445
 "
@@ -99,17 +172,14 @@ if has("autocmd")
     autocmd FileType make set tabstop=8 shiftwidth=8 softtabstop=0 noexpandtab
 endif
 
-
-" Ale linter only when saving files
-" let g:ale_lint_on_text_changed = 'never'
-" Disale completion. Only completion from ycm
-" let g:ale_completion_enabled=0
-
+" =============================
+" ==== http coc vim client ====
+" =============================
+noremap <Leader>h :CocCommand rest-client.request <cr>
 
 " =================
 " === Python ======
 " =================
-
 "To add proper PEP 8 indentation.
 au BufNewFile,BufRead *.py
     \ set tabstop=4 |
@@ -121,42 +191,19 @@ au BufNewFile,BufRead *.py
     \ set fileformat=unix
 
 " Flagging Unnecesary Whitespace
-highlight BadWhitespace ctermbg=red guibg=darkred
+highlight BadWhitespace ctermbg=green guibg=darkgreen
 au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
 
 
 " Make python code look pretty:
-let python_highlight_all=1
+autocmd BufRead,BufNewFile *.py let python_highlight_all=1
+" let python_highlight_all=1
 syntax on
 
 
 autocmd FileType python set sw=4
 autocmd FileType python set ts=4
 autocmd FileType python set sts=4
-
-
-" =================
-" ===== YCM =======
-" =================
-let g:ycm_use_ultisnips_completer = 1 " Default 1, just ensure
-let g:ycm_complete_in_comments = 1 " Completion in comments
-let g:ycm_complete_in_strings = 1 " Completion in string
-let g:ycm_autoclose_preview_window_after_completion=1 " Autoclosing the preview window
-
-
-nnoremap <leader>g :YcmCompleter GoTo<CR>
-
-
-" python with virtualenv support and YCM
-" See https://github.com/Valloric/YouCompleteMe#python-semantic-completion
-"let g:ycm_python_interpreter_path = ''
-"let g:ycm_python_sys_path = []
-"let g:ycm_extra_conf_vim_data = [
-"  \  'g:ycm_python_interpreter_path',
-"  \  'g:ycm_python_sys_path'
-"  \]
-"let g:ycm_global_ycm_extra_conf = '~/.vim/.global_extra_conf.py'
-
 
 
 " ==================
@@ -172,8 +219,6 @@ let g:cpp_class_decl_highlight = 1
 let g:cpp_experimental_template_highlight = 1
 let g:cpp_concepts_highlight = 1
 
-
-
 " ====================================
 " ====================================
 " ====================================
@@ -181,21 +226,6 @@ let g:cpp_concepts_highlight = 1
 " ====================================
 " ====================================
 " ====================================
-
-
-""""""""""""""""""""""""
-"  Limelight and Goyo  "
-""""""""""""""""""""""""
-" gruvbox and limelight compatibility.
-let g:limelight_conceal_ctermfg = 'gray'
-" Goyo.vim integration with Limelight
-autocmd! User GoyoEnter Limelight
-autocmd! User GoyoLeave Limelight!
-
-" Goyo Configuration
-let g:goyo_width="90%"
-let g:goyo_height="90%"
-
 
 " Enable folding
 set foldmethod=indent
@@ -221,7 +251,7 @@ set guifont=Ubuntu\ Nerd\ Font\ Complete\ 11
 "  ColorScheme  "
 """""""""""""""""
 set background=dark
-colorscheme oceanic_material
+colorscheme PaperColor
 
 
 """"""""""""""""""""""
@@ -229,7 +259,6 @@ colorscheme oceanic_material
 """"""""""""""""""""""
 setlocal spell spelllang=es,en_us
 inoremap <C-f> <c-g>u<Esc>[s1z=`]a<c-g>u
-
 
 
 " Line Numbering
@@ -243,8 +272,6 @@ set cursorline
 " Mouse support
 set mouse=a
 
-
-
 " =====================
 " ==== ctags ==========
 " =====================
@@ -254,17 +281,23 @@ if !empty($VIRTUAL_ENV)
     set tags=$VIRTUAL_ENV/tags
 endif
 
-
-
 " Vim sets working directoroy to the current file's directory:
 autocmd BufEnter * lcd %:p:h
 
-
-" map <F9> to NERDTreeToggle
+" =====================
+" ==== nerdtree =======
+" =====================
 nmap <F9> :NERDTreeToggle<CR>
 " Ignore .pyc files in NERDtree
-let NERDTreeIgnore=['\.pyc$', '\~$']
+let NERDTreeIgnore=['\.pyc$']
+" Exit Vim if NERDTree is the only window left.
+autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
+    \ quit | endif
 
+" enable line numbers
+let NERDTreeShowLineNumbers=1
+" make sure relative line numbers are used
+autocmd FileType nerdtree setlocal relativenumber
 
 " TagBar
 nmap <F5> :TagbarToggle<CR>
@@ -275,7 +308,7 @@ nmap <F5> :TagbarToggle<CR>
 
 " Get Rid of -- INSERT --
 set noshowmode
-
+set laststatus=2
 let g:lightline = {
       \ 'colorscheme': 'jellybeans',
       \ 'active': {
@@ -284,18 +317,12 @@ let g:lightline = {
       \           ]
       \ },
       \ 'component_function': {
-      \   'gitbranch': 'fugitive#head'
+      \   'gitbranch': 'FugitiveHead'
       \  },
       \ 'component': {
       \   'samuel': 'Samuel'
       \  },
       \ }
-
-" ================
-" === Vimwiki ====
-" ================
-filetype plugin on
-let g:vimwiki_list = [{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md'}]
 
 
 " =============================
@@ -323,12 +350,9 @@ let g:vimtex_compiler_latexmk = {
 \}
 
 
-
 " =============================
 " ========= UltiSnips =========
 " =============================
-" UltiSnips
-
 let g:UltiSnipsSnippetsDir = '~/.vim/bundle/vim-snippets/'
 let g:UltiSnipsSnippetDirectories=["CustomSnips", "UltiSnips"]
 let g:UltiSnipsExpandTrigger="<c-j>"
