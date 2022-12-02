@@ -3,17 +3,24 @@ filetype off                  " required
 
 call plug#begin()
 
+" Remap <leader>
+let mapleader=","
+
+let maplocalleader = ","
+
 " Plugin outside ~/.vim/plugged with post-update hook
 " Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-" Plug 'NLKNguyen/papercolor-theme'
 Plug 'sainnhe/everforest'
 Plug 'preservim/nerdtree'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'preservim/tagbar'
 Plug 'lervag/vimtex' " To create .tex file.
+Plug 'MaxMEllon/vim-jsx-pretty'
+Plug 'honza/vim-snippets' " Snippets are separated from the engine.
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 
 " Initialize plugin system
 " - Automatically executes `filetype plugin indent on` and `syntax enable`.
@@ -73,6 +80,19 @@ inoremap <silent><expr> <TAB>
       \ coc#refresh()
 inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 
+
+inoremap <silent><expr> <C-j>
+      \ coc#pum#visible() ? coc#_select_confirm() :
+      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+      \ CheckBackspace() ? "\<C-j>" :
+      \ coc#refresh()
+
+
+" Use <C-j> for select text for visual placeholder of snippet.
+vmap <C-j> <Plug>(coc-snippets-select)
+
+
+
 " Make <CR> to accept selected completion item or notify coc.nvim to format
 " <C-g>u breaks current undo, please make your own choice.
 inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
@@ -114,6 +134,15 @@ endfunction
 
 " Highlight the symbol and its references when holding the cursor.
 autocmd CursorHold * silent call CocActionAsync('highlight')
+
+
+
+
+
+
+
+
+
 
 " ====================
 " ====================
@@ -170,3 +199,4 @@ let g:vimtex_compiler_latexmk = {
 
 " Configure clipboard for ubuntu
 set clipboard+=unnamedplus
+
